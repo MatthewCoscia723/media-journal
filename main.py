@@ -97,6 +97,18 @@ def do_favorites():
     print("\n-- Favorite Entries --")
     print_entries(journal.list_favorites())
 
+def do_stats():
+    print("===== My Stats =====")
+    stats = journal.get_stats()
+    print(f"Total entries: {stats['total']}")
+    print(f"Average rating: {stats['average']:.1f}")
+    print("By type:")
+    print(f"movie : {stats['movie']} entries")
+    print(f"tv : {stats['tv']} entries")
+    print(f"game : {stats['game']} entries")
+    print(f"song: {stats['song']} entries")
+    print(f"album: {stats['album']} entries")
+
 MENU = """
 ===== Media Journal =====
 1. Add entry
@@ -106,7 +118,8 @@ MENU = """
 5. Search by title
 6. Edit entry
 7. View favorites
-8. Quit
+8. View Stats
+9. Quit
 """
 
 ACTIONS = {
@@ -116,7 +129,8 @@ ACTIONS = {
     "4": do_delete,
     "5": do_search,
     "6": do_edit,
-    "7": do_favorites
+    "7": do_favorites,
+    "8": do_stats
 }
 
 
@@ -124,14 +138,14 @@ def main():
     while True:
         print(MENU)
         choice = input("Choose an option: ").strip()
-        if choice == "8":
+        if choice == "9":
             print("Goodbye!")
             break
         action = ACTIONS.get(choice)
         if action:
             action()
         else:
-            print("  Invalid choice. Please enter 1–8.")
+            print("  Invalid choice. Please enter 1–9.")
 
 
 if __name__ == "__main__":

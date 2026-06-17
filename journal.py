@@ -65,3 +65,39 @@ def edit_entry(entry_id: int) -> bool:
 def list_favorites() -> list[Entry]:
     entries = storage.load_entries()
     return [e for e in entries if e.favorite]
+
+def get_stats() -> dict:
+    entries = storage.load_entries()
+    if not entries:
+        return {}
+    average = 0
+    for e in entries:
+        average += e.rating
+    average /= len(entries)
+    movie = 0
+    tv = 0
+    game = 0
+    song = 0
+    album = 0
+    for e in entries:
+        if e.media_type == "movie":
+            movie += 1
+        if e.media_type == "tv":
+            tv += 1
+        if e.media_type == "game":
+            game += 1
+        if e.media_type == "song":
+            song += 1
+        if e.media_type == "album":
+            album += 1
+    return {
+        "total" : len(entries), 
+        "average" : average, 
+        "movie" : movie, 
+        "tv" : tv, 
+        "game" : game, 
+        "song" : song, 
+        "album" : album
+    }
+
+    
