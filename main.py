@@ -1,4 +1,5 @@
 import journal
+import export
 
 VALID_TYPES = ("movie", "tv", "game", "song", "album")
 
@@ -109,6 +110,10 @@ def do_stats():
     print(f"song: {stats['song']} entries")
     print(f"album: {stats['album']} entries")
 
+def do_export():
+    export.export_to_txt()
+    print("Journal successfully exported to 'media_journal.txt'!")
+
 MENU = """
 ===== Media Journal =====
 1. Add entry
@@ -118,8 +123,9 @@ MENU = """
 5. Search by title
 6. Edit entry
 7. View favorites
-8. View Stats
-9. Quit
+8. View stats
+9. Export journal
+10. Quit
 """
 
 ACTIONS = {
@@ -130,7 +136,8 @@ ACTIONS = {
     "5": do_search,
     "6": do_edit,
     "7": do_favorites,
-    "8": do_stats
+    "8": do_stats,
+    "9": do_export
 }
 
 
@@ -138,14 +145,14 @@ def main():
     while True:
         print(MENU)
         choice = input("Choose an option: ").strip()
-        if choice == "9":
+        if choice == "10":
             print("Goodbye!")
             break
         action = ACTIONS.get(choice)
         if action:
             action()
         else:
-            print("  Invalid choice. Please enter 1–9.")
+            print("  Invalid choice. Please enter 1–10.")
 
 
 if __name__ == "__main__":
