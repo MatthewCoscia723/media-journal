@@ -4,11 +4,12 @@ from dataclasses import dataclass, field
 @dataclass
 class Entry:
     title: str
-    media_type: str  # "movie", "tv", or "game"
+    media_type: str  # "movie", "tv", "game", "song", or "album"
     date: str        # ISO format: YYYY-MM-DD
     rating: int      # 1–10
     id: int = 0
     notes: str = ""
+    artist: str = ""  # used for song and album entries
 
     def to_dict(self) -> dict:
         return {
@@ -18,6 +19,7 @@ class Entry:
             "date": self.date,
             "rating": self.rating,
             "notes": self.notes,
+            "artist": self.artist,
         }
 
     @staticmethod
@@ -29,4 +31,5 @@ class Entry:
             date=data["date"],
             rating=data["rating"],
             notes=data.get("notes", ""),
+            artist=data.get("artist", ""),
         )
