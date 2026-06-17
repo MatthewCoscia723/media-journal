@@ -50,7 +50,8 @@ def do_add():
     date = prompt_date()
     rating = prompt_rating()
     notes = input("  Notes (optional, press Enter to skip): ").strip()
-    entry = journal.add_entry(title, media_type, date, rating, notes, artist)
+    favorite = input("Mark as favorite (y/n): ").strip().lower() == "y"
+    entry = journal.add_entry(title, media_type, date, rating, notes, artist, favorite)
     print(f"\n  Saved! Entry #{entry.id}: {entry.title}")
 
 
@@ -92,6 +93,10 @@ def do_edit():
     if not success:
         print("  No entry found with that ID.")
 
+def do_favorites():
+    print("\n-- Favorite Entries --")
+    print_entries(journal.list_favorites())
+
 MENU = """
 ===== Media Journal =====
 1. Add entry
@@ -100,7 +105,8 @@ MENU = """
 4. Delete entry
 5. Search by title
 6. Edit entry
-7. Quit
+7. View favorites
+8. Quit
 """
 
 ACTIONS = {
@@ -110,6 +116,7 @@ ACTIONS = {
     "4": do_delete,
     "5": do_search,
     "6": do_edit,
+    "7": do_favorites
 }
 
 
@@ -117,14 +124,14 @@ def main():
     while True:
         print(MENU)
         choice = input("Choose an option: ").strip()
-        if choice == "7":
+        if choice == "8":
             print("Goodbye!")
             break
         action = ACTIONS.get(choice)
         if action:
             action()
         else:
-            print("  Invalid choice. Please enter 1–7.")
+            print("  Invalid choice. Please enter 1–8.")
 
 
 if __name__ == "__main__":
