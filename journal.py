@@ -30,3 +30,24 @@ def delete_entry(entry_id: int) -> bool:
         return False  # nothing was removed
     storage.save_entries(filtered)
     return True
+
+def edit_entry(entry_id: int) -> bool:
+    entries = storage.load_entries()
+    for e in entries:
+        if e.id == entry_id:
+            print(f"Editing Entry #{e.id}: {e.title}")
+            while True:
+                new_rating = input(f"New rating (1-10, current: {e.rating}, press Enter to skip): ").strip()
+                if new_rating == "":
+                    break
+                if new_rating.isdigit() and 1 <= int(new_rating) <= 10:
+                    e.rating = int(new_rating)
+                    break
+                print("  Please enter a number between 1 and 10.")
+            new_notes = input(f"New notes (current: {e.notes}): ").strip()
+            if new_notes:
+                e.notes = new_notes
+                print("Entry updated.")
+            storage.save_entries(entries)
+            return True
+    return False  # entry not found

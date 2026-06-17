@@ -82,6 +82,15 @@ def do_search():
     print(f"\n-- Results for '{query}' --")
     print_entries(results)
 
+def do_edit():
+    print("\n-- Edit Entry --")
+    id_of_change = input("Enter the ID of the item you want to edit: ").strip()
+    if not id_of_change.isdigit():
+        print("  Invalid ID.")
+        return
+    success = journal.edit_entry(int(id_of_change))
+    if not success:
+        print("  No entry found with that ID.")
 
 MENU = """
 ===== Media Journal =====
@@ -90,7 +99,8 @@ MENU = """
 3. View by type
 4. Delete entry
 5. Search by title
-6. Quit
+6. Edit entry
+7. Quit
 """
 
 ACTIONS = {
@@ -99,6 +109,7 @@ ACTIONS = {
     "3": do_view_by_type,
     "4": do_delete,
     "5": do_search,
+    "6": do_edit,
 }
 
 
@@ -106,14 +117,14 @@ def main():
     while True:
         print(MENU)
         choice = input("Choose an option: ").strip()
-        if choice == "6":
+        if choice == "7":
             print("Goodbye!")
             break
         action = ACTIONS.get(choice)
         if action:
             action()
         else:
-            print("  Invalid choice. Please enter 1–6.")
+            print("  Invalid choice. Please enter 1–7.")
 
 
 if __name__ == "__main__":
