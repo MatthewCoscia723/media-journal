@@ -99,5 +99,3 @@ def get_stats() -> dict:
         "song" : song, 
         "album" : album
     }
-
-    
