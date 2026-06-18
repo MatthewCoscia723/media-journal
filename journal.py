@@ -1,6 +1,6 @@
 from models import Entry
 import storage
-
+import random
 
 def add_entry(title: str, media_type: str, date: str, rating: int, notes: str = "", artist: str = "", favorite = False) -> Entry:
     entries = storage.load_entries()
@@ -104,3 +104,8 @@ def get_recent(n = 5) -> list[Entry]:
     entries = storage.load_entries()
     return [e for e in entries[-n:]]
 
+def random_entry():
+    entries = storage.load_entries()
+    # what i was going to do was to have it pick a random id and then id find the entry that matched
+    # up to it and then return that, but intstead Claude showed me this
+    return random.choice(entries)

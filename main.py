@@ -3,6 +3,13 @@ import export
 
 VALID_TYPES = ("movie", "tv", "game", "song", "album")
 
+TYPE_LABELS = {
+    "movie": "movie",
+    "tv": "TV show",
+    "game": "game",
+    "song": "song",
+    "album": "album"
+}
 
 def print_entries(entries):
     if not entries:
@@ -118,6 +125,13 @@ def do_recent():
     print("\n-- Recent Entries --")
     print_entries(journal.get_recent())
 
+def do_random():
+    print("Your random piece of media from your journal is: ")
+    entry = journal.random_entry()
+    label = TYPE_LABELS[entry.media_type]
+    artist_part = f" by {entry.artist}" if entry.media_type in ("song", "album") else ""
+    print(f"The {label} {entry.title}{artist_part} with a rating of {entry.rating}/10")
+
 MENU = """
 ===== Media Journal =====
 1. Add entry
@@ -130,7 +144,8 @@ MENU = """
 8. View stats
 9. Export journal
 10. View recent entries
-11. Quit
+11. Pick random media piece
+12. Quit
 """
 
 ACTIONS = {
@@ -143,7 +158,9 @@ ACTIONS = {
     "7": do_favorites,
     "8": do_stats,
     "9": do_export,
-    "10": do_recent
+    "10": do_recent,
+    "11": do_random
+
 }
 
 
@@ -151,14 +168,14 @@ def main():
     while True:
         print(MENU)
         choice = input("Choose an option: ").strip()
-        if choice == "11":
+        if choice == "12":
             print("Goodbye!")
             break
         action = ACTIONS.get(choice)
         if action:
             action()
         else:
-            print("  Invalid choice. Please enter 1–11.")
+            print("  Invalid choice. Please enter 1–12.")
 
 
 if __name__ == "__main__":
