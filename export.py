@@ -17,5 +17,5 @@ def export_to_txt():
         txt.write(f"Date: {e.date}\n")
         txt.write(f"Rating: {e.rating}/10\n")
         txt.write(f"Notes: {e.notes}\n")
-        txt.write(f"Favorite: {'Yes' if e.favorite == True else 'No'}\n")
+        txt.write(f"Favorite: {'Yes' if e.favorite == True else 'No'}\n\n")
     txt.close()
