@@ -114,6 +114,10 @@ def do_export():
     export.export_to_txt()
     print("Journal successfully exported to 'media_journal.txt'!")
 
+def do_recent():
+    print("\n-- Recent Entries --")
+    print_entries(journal.get_recent())
+
 MENU = """
 ===== Media Journal =====
 1. Add entry
@@ -125,7 +129,8 @@ MENU = """
 7. View favorites
 8. View stats
 9. Export journal
-10. Quit
+10. View recent entries
+11. Quit
 """
 
 ACTIONS = {
@@ -137,7 +142,8 @@ ACTIONS = {
     "6": do_edit,
     "7": do_favorites,
     "8": do_stats,
-    "9": do_export
+    "9": do_export,
+    "10": do_recent
 }
 
 
@@ -145,14 +151,14 @@ def main():
     while True:
         print(MENU)
         choice = input("Choose an option: ").strip()
-        if choice == "10":
+        if choice == "11":
             print("Goodbye!")
             break
         action = ACTIONS.get(choice)
         if action:
             action()
         else:
-            print("  Invalid choice. Please enter 1–10.")
+            print("  Invalid choice. Please enter 1–11.")
 
 
 if __name__ == "__main__":

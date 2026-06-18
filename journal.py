@@ -99,3 +99,8 @@ def get_stats() -> dict:
         "song" : song, 
         "album" : album
     }
+
+def get_recent(n = 5) -> list[Entry]:
+    entries = storage.load_entries()
+    return [e for e in entries[-n:]]
+
