@@ -1,5 +1,6 @@
 import journal
 import export
+from tabulate import tabulate
 
 VALID_TYPES = ("movie", "tv", "game", "song", "album")
 
@@ -15,12 +16,9 @@ def print_entries(entries):
     if not entries:
         print("  No entries found.")
         return
-    header = f"{'ID':<4} {'Type':<7} {'Rating':<7} {'Date':<12} {'Title':<30} {'Artist':<20} Notes"
-    print("\n" + header)
-    print("-" * len(header))
-    for e in entries:
-        print(f"{e.id:<4} {e.media_type:<7} {e.rating:<7} {e.date:<12} {e.title:<30} {e.artist:<20} {e.notes}")
-    print()
+    headers = ["ID", "Type", "Rating", "Date", "Title", "Artist", "Notes"]
+    rows = [[e.id, e.media_type, e.rating, e.date, e.title, e.artist, e.notes] for e in entries]
+    print(tabulate(rows, headers=headers, tablefmt="rounded_outline"))
 
 
 def prompt_media_type():
