@@ -71,7 +71,10 @@ def do_add():
     notes = input("Notes (optional, press Enter to skip): ").strip()
     favorite = input("Mark as favorite (y/n): ").strip().lower() == "y"
     entry = journal.add_entry(title, media_type, date, rating, notes, artist, favorite)
-    print(Fore.GREEN + f"\nSaved! Entry #{entry.id}: {entry.title}" + Style.RESET_ALL)
+    if entry:
+        print(Fore.GREEN + f"\nSaved! Entry #{entry.id}: {entry.title}" + Style.RESET_ALL)
+    else:
+        print(Fore.RED + "Error: Could not save entry." + Style.RESET_ALL)
 
 
 def do_view_all():

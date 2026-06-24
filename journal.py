@@ -2,8 +2,14 @@ from models import Entry
 import storage
 import random
 
-def add_entry(title: str, media_type: str, date: str, rating: int, notes: str = "", artist: str = "", favorite = False) -> Entry:
+def add_entry(title: str, media_type: str, date: str, rating: int, notes: str = "", artist: str = "", favorite=False) -> Entry:
     entries = storage.load_entries()
+
+    if any(title.lower() == e.title.lower() for e in entries):
+        inp = input(f"Warning: '{title}' already exists. Add anyway? (y/n): ").strip().lower()
+        if inp != "y":
+            return None
+
     new_id = max((e.id for e in entries), default=0) + 1
     entry = Entry(title=title, media_type=media_type, date=date, rating=rating, id=new_id, notes=notes, artist=artist, favorite=favorite)
     entries.append(entry)
