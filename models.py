@@ -11,6 +11,7 @@ class Entry:
     notes: str = ""
     artist: str = ""  # used for song and album entries
     favorite: bool = False
+    status: str = ""
 
     def to_dict(self) -> dict:
         return {
@@ -22,6 +23,7 @@ class Entry:
             "notes": self.notes,
             "artist": self.artist,
             "favorite": self.favorite,
+            "status": self.status,
         }
 
     @staticmethod
@@ -35,4 +37,5 @@ class Entry:
             notes=data.get("notes", ""),
             artist=data.get("artist", ""),
             favorite=data.get("favorite", False),
+            status=data.get("status", ""),
         )

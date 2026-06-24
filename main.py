@@ -4,7 +4,7 @@ from tabulate import tabulate
 from colorama import init, Fore, Style
 init()
 
-VALID_TYPES = ("movie", "tv", "game", "song", "album")
+VALID_MEDIA_TYPES = ("movie", "tv", "game", "song", "album")
 
 TYPE_LABELS = {
     "movie": "movie",
@@ -14,6 +14,8 @@ TYPE_LABELS = {
     "album": "album"
 }
 
+VALID_STATUS_TYPES = ("completed", "in progress", "dropped", "planned")
+
 def color_row(e):
     if e.favorite:
         return [Fore.YELLOW + str(e.id) + Style.RESET_ALL,
@@ -22,14 +24,15 @@ def color_row(e):
                 Fore.YELLOW + e.date + Style.RESET_ALL,
                 Fore.YELLOW + e.title + Style.RESET_ALL,
                 Fore.YELLOW + e.artist + Style.RESET_ALL,
-                Fore.YELLOW + e.notes + Style.RESET_ALL]
-    return [e.id, e.media_type, e.rating, e.date, e.title, e.artist, e.notes]
+                Fore.YELLOW + e.notes + Style.RESET_ALL,
+                Fore.YELLOW + e.status + Style.RESET_ALL]
+    return [e.id, e.media_type, e.rating, e.date, e.title, e.artist, e.notes, e.status]
 
 def print_entries(entries):
     if not entries:
-        print("  No entries found.")
+        print("No entries found.")
         return
-    headers = [Fore.MAGENTA + col + Style.RESET_ALL for col in ["ID", "Type", "Rating", "Date", "Title", "Artist", "Notes"]]
+    headers = [Fore.MAGENTA + col + Style.RESET_ALL for col in ["ID", "Type", "Rating", "Date", "Title", "Artist", "Notes", "Status"]]
     rows = [color_row(e) for e in entries]
     print(tabulate(rows, headers=headers, tablefmt="rounded_outline"))
 
@@ -37,7 +40,7 @@ def print_entries(entries):
 def prompt_media_type():
     while True:
         t = input("Type (movie / tv / game / song / album): ").strip().lower()
-        if t in VALID_TYPES:
+        if t in VALID_MEDIA_TYPES:
             return t
         print(Fore.RED + "Please enter: movie, tv, game, song, or album" + Style.RESET_ALL)
 
@@ -47,7 +50,7 @@ def prompt_rating():
         raw = input("Rating (1–10): ").strip()
         if raw.isdigit() and 1 <= int(raw) <= 10:
             return int(raw)
-        print(Fore.RED + "Please enter a number between 1 and 10." + Style.RESET_ALL)
+        print(Fore.RED + "Please enter a number between 1 and 10" + Style.RESET_ALL)
 
 
 def prompt_date():
@@ -58,6 +61,12 @@ def prompt_date():
             return d
         print(Fore.RED + "Please use the format YYYY-MM-DD, e.g. 2024-06-15" + Style.RESET_ALL)
 
+def prompt_status():
+    while True:
+        i = input("Mark completion status (completed, in progress, dropped, or planned): ").strip().lower()
+        if i in VALID_STATUS_TYPES:
+            return i
+        print(Fore.RED + "Please enter: completed, in progress, dropped, or planned" + Style.RESET_ALL)
 
 def do_add():
     print(Fore.BLUE + "\n-- Add Entry --" + Style.RESET_ALL)
@@ -70,7 +79,8 @@ def do_add():
     rating = prompt_rating()
     notes = input("Notes (optional, press Enter to skip): ").strip()
     favorite = input("Mark as favorite (y/n): ").strip().lower() == "y"
-    entry = journal.add_entry(title, media_type, date, rating, notes, artist, favorite)
+    status = prompt_status()
+    entry = journal.add_entry(title, media_type, date, rating, notes, artist, favorite, status)
     if entry:
         print(Fore.GREEN + f"\nSaved! Entry #{entry.id}: {entry.title}" + Style.RESET_ALL)
     else:
@@ -147,7 +157,8 @@ def do_random():
     entry = journal.random_entry()
     label = TYPE_LABELS[entry.media_type]
     artist_part = f" by {entry.artist}" if entry.media_type in ("song", "album") else ""
-    print(f"The {label} {entry.title}{artist_part} with a rating of {entry.rating}/10")
+    status_part = f", marked as {entry.status}" if entry.status else ""
+    print(f"The {label} {entry.title}{artist_part} with a rating of {entry.rating}/10{status_part}")
 
 MENU = Fore.CYAN + """
 ===== Media Journal =====

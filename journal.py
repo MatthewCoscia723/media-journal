@@ -2,7 +2,7 @@ from models import Entry
 import storage
 import random
 
-def add_entry(title: str, media_type: str, date: str, rating: int, notes: str = "", artist: str = "", favorite=False) -> Entry:
+def add_entry(title: str, media_type: str, date: str, rating: int, notes: str = "", artist: str = "", favorite=False, status: str = "") -> Entry:
     entries = storage.load_entries()
 
     if any(title.lower() == e.title.lower() for e in entries):
@@ -11,7 +11,7 @@ def add_entry(title: str, media_type: str, date: str, rating: int, notes: str = 
             return None
 
     new_id = max((e.id for e in entries), default=0) + 1
-    entry = Entry(title=title, media_type=media_type, date=date, rating=rating, id=new_id, notes=notes, artist=artist, favorite=favorite)
+    entry = Entry(title=title, media_type=media_type, date=date, rating=rating, id=new_id, notes=notes, artist=artist, favorite=favorite, status=status)
     entries.append(entry)
     storage.save_entries(entries)
     return entry
@@ -50,11 +50,11 @@ def edit_entry(entry_id: int) -> bool:
                     e.rating = int(new_rating)
                     print("Entry updated")
                     break
-                print("  Please enter a number between 1 and 10.")
+                print("  Please enter a number between 1 and 10")
             new_notes = input(f"New notes (current: {e.notes}): ").strip()
             if new_notes:
                 e.notes = new_notes
-                print("Entry updated.")
+                print("Entry updated")
             while True:
                 new_favorite = input(f"Mark as favorite (y/n, current: {'y' if e.favorite else 'n'}, press Enter to skip): ").strip().lower()
                 if new_favorite == "":
@@ -64,6 +64,15 @@ def edit_entry(entry_id: int) -> bool:
                     print("Entry updated")
                     break
                 print("Please enter either 'y' or 'n'")
+            while True:
+                new_status = input(f"New completion status ('completed', 'in progress', 'dropped', or 'planned', currently: {e.status}, press Enter to skip): ").strip().lower()
+                if new_status == "":
+                    break
+                if new_status in ("completed", "in progress", "dropped", "planned"):
+                    e.status = new_status
+                    print("Entry updated")
+                    break
+                print("Please enter either 'completed', 'in progress', 'dropped', or 'planned'")
             storage.save_entries(entries)
             return True
     return False  # entry not found
